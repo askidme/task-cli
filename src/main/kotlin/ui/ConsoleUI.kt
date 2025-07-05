@@ -1,10 +1,10 @@
 package com.codergm.ui
 
 import com.codergm.model.Status
-import com.codergm.service.TaskService
+import com.codergm.service.FileTaskService
 import java.util.*
 
-class ConsoleUI(private val taskService: TaskService) {
+class ConsoleUI(private val taskService: FileTaskService) {
     fun run() {
         println("\uD83D\uDCC6 Welcome to Daily Task Tracker!")
         println("Available commands: add, list, complete, delete, exit")

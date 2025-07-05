@@ -1,19 +1,19 @@
 package service
 
 import com.codergm.model.Status
-import com.codergm.service.TaskService
+import com.codergm.service.MemoryTaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
 
-class TaskServiceTest {
+class MemoryTaskServiceTest {
 
-    private lateinit var taskService: TaskService
+    private lateinit var taskService: MemoryTaskService
 
     @BeforeEach
     fun setUp() {
-        taskService = TaskService()
+        taskService = MemoryTaskService()
     }
 
     @Test
