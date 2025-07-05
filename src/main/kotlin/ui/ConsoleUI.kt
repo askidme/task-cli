@@ -14,7 +14,7 @@ class ConsoleUI(private val taskService: TaskService) {
                 "add" -> addTask()
                 "list" -> listTasks()
                 "complete" -> completeTask()
-                "delete" -> println("TODO: Delete task")
+                "delete" -> deleteTask()
                 "exit" -> {
                     println("Goodbye!")
                     return
@@ -23,6 +23,17 @@ class ConsoleUI(private val taskService: TaskService) {
                 else -> println("Unknown command. Try again.")
             }
         }
+    }
+
+    private fun deleteTask() {
+        if (taskService.listTasks().isEmpty()) return println("No tasks to delete")
+
+        listTasks()
+        println("Enter the task id to delete")
+        runCatching { UUID.fromString(readln()) }.getOrNull()
+            ?.takeIf { taskService.deleteTask(it) }
+            ?.let { println("\uD83D\uDDD1\uFE0F Task deleted successfully") }
+            ?: println("❌ Invalid task number.")
     }
 
     private fun completeTask() {
@@ -39,7 +50,7 @@ class ConsoleUI(private val taskService: TaskService) {
     private fun addTask() {
         println("Enter task title:")
         val title = readln()
-        println("Enter task description")
+        println("Enter task description:")
         val desc = readln()
         println("✅ Task added: ${taskService.addTask(title = title, description = desc)}")
     }
