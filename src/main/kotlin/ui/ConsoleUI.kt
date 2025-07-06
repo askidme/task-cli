@@ -59,14 +59,22 @@ class ConsoleUI(private val taskService: FileTaskService) {
 
         println("Enter priority (LOW, MEDIUM, HIGH): ")
         val priorityInput = readlnOrNull()?.trim()?.uppercase()
-        val priority = try {
-            Priority.valueOf(priorityInput ?: "MEDIUM")
-        } catch(e: IllegalArgumentException){
+
+        val priority = runCatching { Priority.valueOf(priorityInput ?: "MEDIUM") }.getOrElse {
             println("Invalid priority defaulting to MEDIUM")
             Priority.MEDIUM
         }
 
-        println("✅ Task added: ${taskService.addTask(title = title, description = desc, dueDate = dueDate, priority = priority)}")
+        println(
+            "✅ Task added: ${
+                taskService.addTask(
+                    title = title,
+                    description = desc,
+                    dueDate = dueDate,
+                    priority = priority
+                )
+            }"
+        )
     }
 
     private fun listTasks() {

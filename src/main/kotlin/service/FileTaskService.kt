@@ -31,7 +31,7 @@ class FileTaskService(private val file: File = File("tasks.json")) : TaskService
             saveTasks()
         } != null
 
-    override fun deleteTask(id: UUID): Boolean = tasks.removeIf { it.id == id }
+    override fun deleteTask(id: UUID): Boolean = tasks.removeAll { it.id == id }
 
     private fun saveTasks() {
         val json = Json.encodeToString(tasks)
