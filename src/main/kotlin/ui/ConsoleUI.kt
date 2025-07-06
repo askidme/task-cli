@@ -1,7 +1,9 @@
 package com.codergm.ui
 
+import com.codergm.model.Priority
 import com.codergm.model.Status
 import com.codergm.service.FileTaskService
+import java.time.LocalDate
 import java.util.*
 
 class ConsoleUI(private val taskService: FileTaskService) {
@@ -52,7 +54,19 @@ class ConsoleUI(private val taskService: FileTaskService) {
         val title = readln()
         println("Enter task description:")
         val desc = readln()
-        println("✅ Task added: ${taskService.addTask(title = title, description = desc)}")
+        println("Enter due date (YYYY-MM-DD) or press Enter to skip")
+        val dueDate = readlnOrNull()?.trim()?.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }
+
+        println("Enter priority (LOW, MEDIUM, HIGH): ")
+        val priorityInput = readlnOrNull()?.trim()?.uppercase()
+        val priority = try {
+            Priority.valueOf(priorityInput ?: "MEDIUM")
+        } catch(e: IllegalArgumentException){
+            println("Invalid priority defaulting to MEDIUM")
+            Priority.MEDIUM
+        }
+
+        println("✅ Task added: ${taskService.addTask(title = title, description = desc, dueDate = dueDate, priority = priority)}")
     }
 
     private fun listTasks() {
@@ -65,7 +79,7 @@ class ConsoleUI(private val taskService: FileTaskService) {
 
         println("\n Your tasks")
         tasks.forEachIndexed { index, task ->
-            println("${index + 1}. [${if (task.status == Status.COMPLETED) "✓" else " "}] ${task.title} - ${task.description}")
+            println("${index + 1}. [${task.status}] ${task.title} - ${task.priority} (Due: ${task.dueDate ?: "N/A"})")
         }
     }
 }
